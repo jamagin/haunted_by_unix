@@ -1,4 +1,7 @@
-use std::{string::String, io::Stdin};
+use std::io::BufReader;
+use std::fs::File;
+use std::string::String;
+use std::io;
 use lexopt::prelude::*;
 // for now only implementing -c -l -m -w
 struct Args {
@@ -53,17 +56,33 @@ fn parse_args() -> Result<Args, lexopt::Error> {
     })
 }
 
-fn count(fname) -> (lines, words, chars) {
+struct Counts {
+    chars: u64,
+    lines: u64,
+    words: u64,
+}
 
+fn count(handle) -> (Counts, io::Result<()>) {
+    let (mut chars, mut lines, mut words) = (0, 0, 0);
+    let mut buffer = Vec::new();
+    let mut reader = BufReader::new(handle);
+    let mut buffer = [0; 10000000]; // XXX
+
+    Counts {
+        chars,
+        lines,
+        words,
+    }
 }
 
 fn main() -> Result<(), lexopt::Error> {
     let args = parse_args()?;
     if args.files.is_empty() {
-        count(Stdin);
+        count(io::stdin());
     }
     for fname in args.files.iter() {
-        count(fname);
+        let fhandle = File::open(fname).expect("failed to open");
+        count(fhandle);
         // print lines words chars for this
         // accumulate
     }
