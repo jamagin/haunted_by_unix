@@ -1,0 +1,12 @@
+[package]
+name = "haunted_by_unix"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "wc"
+
+[dependencies]
+clap = { version = "4.0.23", features = ["derive"] }
+lexopt = "0.2.1"
